@@ -2,24 +2,35 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle, CheckCircle } from "lucide-react"
 
 export function SignInForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const resetSuccess = searchParams.get("reset") === "success"
+
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
+
+  useEffect(() => {
+    if (resetSuccess) {
+      setSuccess("Your password has been reset successfully. Please sign in with your new password.")
+    }
+  }, [resetSuccess])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -65,6 +76,14 @@ export function SignInForm() {
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
+
+        {success && (
+          <Alert className="mb-4 bg-green-50 text-green-800 border-green-200">
+            <CheckCircle className="h-4 w-4 text-green-600" />
+            <AlertDescription>{success}</AlertDescription>
+          </Alert>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
@@ -79,7 +98,12 @@ export function SignInForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+              <Button variant="link" className="p-0 h-auto text-sm" asChild>
+                <Link href="/auth/forgot-password">Forgot password?</Link>
+              </Button>
+            </div>
             <Input
               id="password"
               name="password"
@@ -95,8 +119,8 @@ export function SignInForm() {
         </form>
       </CardContent>
       <CardFooter className="flex justify-center">
-        <Button variant="link" onClick={() => router.push("/auth/sign-up")}>
-          Don't have an account? Sign up
+        <Button variant="link" asChild>
+          <Link href="/auth/sign-up">Don't have an account? Sign up</Link>
         </Button>
       </CardFooter>
     </Card>

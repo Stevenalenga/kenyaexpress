@@ -29,8 +29,14 @@ export default function Home() {
               <Button asChild variant="ghost">
                 <Link href="#faq">FAQ</Link>
               </Button>
+              <Button asChild variant="ghost">
+                <Link href="/merchant/register">For Merchants</Link>
+              </Button>
+              <Button asChild variant="ghost">
+                <Link href="/auth/sign-in">Login</Link>
+              </Button>
               <Button asChild>
-                <Link href="#contact">Contact Us</Link>
+                <Link href="/auth/sign-up">Sign Up</Link>
               </Button>
             </nav>
           </div>
@@ -52,7 +58,7 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Button asChild size="lg">
-                    <Link href="#contact">
+                    <Link href="/auth/sign-up">
                       Get Started <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>

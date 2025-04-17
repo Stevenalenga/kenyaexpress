@@ -99,3 +99,34 @@ export async function updateShipmentStatus(shipmentId: string, status: string) {
   revalidatePath("/admin/shipments")
   return { success: true }
 }
+
+export async function updateMerchantStatus(merchantId: string, status: string, rejectionReason?: string) {
+  const isUserAdmin = await isAdmin()
+
+  if (!isUserAdmin) {
+    throw new Error("Unauthorized")
+  }
+
+  const supabase = createServerComponentClient<Database>({ cookies })
+
+  const updateData: any = {
+    status,
+    updated_at: new Date().toISOString(),
+  }
+
+  if (status === "approved") {
+    updateData.approved_at = new Date().toISOString()
+  } else if (status === "rejected") {
+    updateData.rejected_at = new Date().toISOString()
+    updateData.rejection_reason = rejectionReason
+  }
+
+  const { error } = await supabase.from("merchants").update(updateData).eq("id", merchantId)
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  revalidatePath("/admin/merchants")
+  return { success: true }
+}

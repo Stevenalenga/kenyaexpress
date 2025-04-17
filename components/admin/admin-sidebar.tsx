@@ -2,7 +2,17 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Users, Package, Truck, MessageSquare, LogOut, ChevronRight, ChevronLeft } from "lucide-react"
+import {
+  LayoutDashboard,
+  Users,
+  Package,
+  Truck,
+  MessageSquare,
+  LogOut,
+  ChevronRight,
+  ChevronLeft,
+  Store,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
@@ -31,6 +41,11 @@ export function AdminSidebar() {
       name: "Users",
       href: "/admin/users",
       icon: <Users className="h-5 w-5" />,
+    },
+    {
+      name: "Merchants",
+      href: "/admin/merchants",
+      icon: <Store className="h-5 w-5" />,
     },
     {
       name: "Packages",
