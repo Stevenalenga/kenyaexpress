@@ -45,6 +45,10 @@ export function SignUpForm() {
         password: formData.password,
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`,
+          data: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+          },
         },
       })
 
@@ -57,9 +61,14 @@ export function SignUpForm() {
           email: formData.email,
           first_name: formData.firstName,
           last_name: formData.lastName,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         })
 
-        if (profileError) throw profileError
+        if (profileError) {
+          console.error("Error creating user profile:", profileError)
+          throw new Error("Failed to create user profile. Please try again.")
+        }
       }
 
       router.push("/auth/verify")
